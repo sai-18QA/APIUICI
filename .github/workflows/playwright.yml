@@ -24,11 +24,10 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Generate Salesforce Storage State
-        env:
-          SF_USERNAME: ${{ secrets.SF_USERNAME }}
-          SF_PASSWORD: ${{ secrets.SF_PASSWORD }}
-        run: npx playwright test tests/auth/salesforce.spec.ts
+      - name: Restore Salesforce Storage State
+        run: |
+          mkdir -p storager
+          echo "${{ secrets.SF_STORAGE_STATE }}" | base64 --decode > storager/storageState.json
 
       - name: Run Salesforce API + UI Test
         env:
